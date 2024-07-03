@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   mongodb:
     image: mongo:latest
@@ -10,21 +12,14 @@ services:
       - mongo-data:/data/db
     networks:
       - sonarnet
-    # environment:
-    #   MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-    #   MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
 
   api: 
-    build: .
+    image: srh_api:latest
     container_name: srh_api
-    volumes:
-      - .:/app
-      - /app/node_modules
     ports:
-      - ${APP_PORT}:${APP_PORT}
-    command: npm run start:dev
-    env_file:
-      - .env
+      - '3000:3000' # Ajustez ceci selon vos besoins
+    environment:
+      - NODE_ENV=production
     depends_on:
       - mongodb
     networks:
@@ -42,8 +37,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - sonarnet
-    # environment:
-    #   JENKINS_OPTS: --prefix=/jenkins
 
   sonarqube:
     image: sonarqube:community
@@ -90,3 +83,4 @@ volumes:
 
 networks:
   sonarnet:
+    external: true

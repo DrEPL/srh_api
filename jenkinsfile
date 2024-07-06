@@ -8,7 +8,7 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Build Docker Image !') {
             steps {
                 script {
                     sh 'docker-compose down && docker-compose up -d'
@@ -19,7 +19,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Exécutez votre script de déploiement ou commande Docker
+                    // Exécutez votre script de déploiement ou commande Docker !
                     // Par exemple : docker-compose up -d
                     sh 'docker-compose down && docker-compose up -d'
                 }
@@ -33,3 +33,4 @@ pipeline {
         }
     }
 }
+

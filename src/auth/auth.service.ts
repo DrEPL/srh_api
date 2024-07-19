@@ -16,7 +16,7 @@ export class AuthService {
     private jwtService: JwtService
   ) { }
 
-  async signUp(signUpDto: SignUpDto): Promise<{ token: string, user: User }> {
+  async signUp(signUpDto: SignUpDto): Promise<{ token: string, user: UserDocument }> {
     const { nom, prenom, telephone, email, password, img_url } = signUpDto
     const hashedPassword = await bcrypt.hash(password, 10)
     const user = await this.userModele.create({ nom, prenom, telephone, email, password: hashedPassword, img_url })
@@ -24,11 +24,11 @@ export class AuthService {
     return { token, user }
   }
 
-  async login(loginDto: LoginDto): Promise<{ token: string, user: User }> {
+  async login(loginDto: LoginDto): Promise<{ token: string, user: UserDocument }> {
     const { telephone, password } = loginDto
     const user = await this.userModele.findOne({ telephone });
     if (!user) {
-      throw new UnauthorizedException(" Numéro incorrect")
+      throw new UnauthorizedException(" L'utilisateur n'existe pas")
     }
 
     const isPasswordMatched = await bcrypt.compare(password, (await user).password)
